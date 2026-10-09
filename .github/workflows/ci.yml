@@ -17,7 +17,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with: { python-version: "3.14", cache: pip }
       - run: pip install ruff
@@ -40,7 +40,7 @@ jobs:
       ARCIVO_NO_ANIMATIONS: "1"
       PYTHONUTF8: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with: { python-version: "${{ matrix.python }}", cache: pip }
       - name: Qt runtime libraries (Linux)
@@ -71,7 +71,7 @@ jobs:
     if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'build')
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with: { python-version: "3.14", cache: pip }
       - name: Build app folder + portable ZIP (installer is built on release)
