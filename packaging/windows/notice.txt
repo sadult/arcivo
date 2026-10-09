@@ -1,0 +1,19 @@
+Arcivo – Your Saved Messages, organised.
+
+Before you install, please note:
+
+• Arcivo is an independent, open-source application. It is NOT made, endorsed or
+  supported by Telegram. It uses the official Telegram API.
+
+• You will sign in with your own api_id and api_hash, created at
+  https://my.telegram.org/apps. Your session is stored in the Windows credential
+  vault (DPAPI) on this computer and is never sent anywhere except Telegram.
+
+• Arcivo keeps a local index of your Saved Messages so you can search, analyse and
+  export them. Nothing is uploaded to third parties, and your data is never used
+  to train AI models.
+
+• Arcivo never deletes or changes anything on Telegram without your explicit
+  confirmation. Deletions on Telegram cannot be undone.
+
+You can uninstall at any time; you will be asked whether to keep your local data.

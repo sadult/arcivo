@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest an idea or improvement
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      placeholder: "When I … I want to … so that …"
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How should it look or work? Mock-ups welcome (demo data only).
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Scope
+      options:
+        - label: This only concerns the user's own Saved Messages and requires explicit user action (Telegram API ToS).
+          required: true

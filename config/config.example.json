@@ -1,0 +1,21 @@
+{
+  "_comment": "Example settings. Arcivo writes its real config to %APPDATA%\\Arcivo\\config.json (or ArcivoData\\config in portable mode). API credentials and the session are NOT stored here - they live in the Windows Credential Manager / DPAPI vault.",
+  "log_level": "INFO",
+  "database_path": "",
+  "download_dir": "",
+  "export_dir": "",
+  "credential_backend": "auto",
+  "confirm_destructive_twice": true,
+  "selection_on_filter_change": "ask",
+  "appearance": { "theme": "dark", "language": "en", "font_scale": 1.0, "calendar": "auto", "native_digits": true,
+                  "animations": true, "compact_rows": false },
+  "sync": { "auto_sync_on_start": true, "auto_sync_interval_min": 0, "recheck_recent": 300, "batch_size": 100,
+            "request_delay_s": 0.6, "max_flood_wait_s": 900, "keep_remote_deleted": false },
+  "performance": { "download_concurrency": 2, "page_size": 400, "thumbnail_cache_mb": 512, "preview_max_mb": 25 },
+  "export": { "format": "json", "folder_template": "{type}/{year}/{month}", "file_template": "{date}_{id}_{filename}",
+              "include_metadata": true, "include_text": true, "download_media": true },
+  "notifications": { "toasts": true, "job_finished": true, "sync_finished": true, "errors": true },
+  "privacy": { "mask_phone": true, "hide_previews_in_screenshots": false, "clear_cache_on_logout": true },
+  "shortcuts": { "command_palette": "Ctrl+K", "focus_search": "Ctrl+F", "sync": "Ctrl+R", "export": "Ctrl+E" },
+  "schema": 1
+}

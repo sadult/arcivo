@@ -1,0 +1,8 @@
+# Runtime dependencies (pinned ranges). Use `pip install -e .[dev]` for development.
+telethon>=1.41,<2
+PySide6-Essentials>=6.10
+PySide6-Addons>=6.10
+keyring>=25
+platformdirs>=4
+python-socks[asyncio]>=2.4
+cryptg>=0.5 ; platform_system == "Windows"

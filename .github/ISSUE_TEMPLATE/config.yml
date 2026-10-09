@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/sadult/arcivo/security/advisories/new
+    about: Please report security issues privately.
+  - name: Questions & ideas
+    url: https://github.com/sadult/arcivo/discussions
+    about: Ask questions and share tips in Discussions.
+  - name: Telegram API credentials help
+    url: https://core.telegram.org/api/obtaining_api_id
+    about: How to obtain your own api_id and api_hash.

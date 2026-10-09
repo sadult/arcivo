@@ -1,0 +1,45 @@
+# --- secrets & personal data: never commit ---
+*.session
+*.session-journal
+secrets*.json
+.env
+.env.*
+!.env.example
+ArcivoData/
+portable.flag
+*.db
+*.db-wal
+*.db-shm
+!tests/fixtures/*.db
+sample/
+exports/
+*.log
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv*/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# --- build outputs ---
+build/
+dist/
+packaging/pyinstaller/version_info*.txt
+!packaging/pyinstaller/version_info.template.txt
+*.spec.bak
+
+# --- editors / OS ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
