@@ -46,7 +46,7 @@ jobs:
           $body = if ($m.Success) { $m.Groups[1].Value.Trim() } else { "See CHANGELOG.md" }
           $body += "`n`n---`n**Downloads:** ``Arcivo-$ver-Setup-x64.exe`` (recommended, per-user installer) or ``Arcivo-$ver-portable-x64.zip``. Verify with ``SHA256SUMS.txt``.`n`nAfter installing, start **Arcivo** (console home screen: sign in, check connection, proxy) and then **Arcivo Dashboard** (the desktop app).`n`nArcivo is an independent app that uses the Telegram API; it is not affiliated with Telegram. You need your own API ID/hash from https://my.telegram.org/apps."
           Set-Content release-notes.md $body
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.event.inputs.tag || github.ref_name }}
           name: Arcivo ${{ github.event.inputs.tag || github.ref_name }}
