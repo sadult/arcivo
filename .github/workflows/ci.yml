@@ -69,16 +69,30 @@ jobs:
   build-windows:
     needs: test
     if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'build')
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            arch: x64
+          - os: windows-11-arm
+            arch: arm64
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with: { python-version: "3.14", cache: pip }
+      - name: Build cryptg acceleration wheel (ARM64)
+        if: matrix.arch == 'arm64'
+        shell: pwsh
+        run: |
+          pip install setuptools-rust
+          pip wheel --no-deps cryptg -w packaging/wheels
       - name: Build app folder + portable ZIP (installer is built on release)
         shell: pwsh
-        run: ./scripts/build.ps1 -Python python -SkipTests -SkipInstaller -Build ${{ github.sha }}
+        run: ./scripts/build.ps1 -Python python -Arch ${{ matrix.arch }} -SkipTests -SkipInstaller -Build ${{ github.sha }}
       - uses: actions/upload-artifact@v6
         with:
-          name: arcivo-windows-portable
+          name: arcivo-windows-portable-${{ matrix.arch }}
           path: dist/*.zip
           retention-days: 14

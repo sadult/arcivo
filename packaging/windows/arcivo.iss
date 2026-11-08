@@ -6,6 +6,17 @@
 #ifndef SourceDir
   #define SourceDir "..\..\dist\Arcivo"
 #endif
+#ifndef AppArch
+  #define AppArch "x64"
+#endif
+
+#if AppArch == "arm64"
+  #define ArchAllowed "arm64"
+  #define ArchInstallMode "arm64"
+#else
+  #define ArchAllowed "x64compatible"
+  #define ArchInstallMode "x64compatible"
+#endif
 #define AppName "Arcivo"
 #define AppPublisher "Bitologist"
 #define AppURL "https://github.com/sadult/arcivo"
@@ -28,11 +39,11 @@ DefaultGroupName={#AppName}
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-ArchitecturesAllowed=x64compatible
-ArchitecturesInstallIn64BitMode=x64compatible
+ArchitecturesAllowed={#ArchAllowed}
+ArchitecturesInstallIn64BitMode={#ArchInstallMode}
 MinVersion=10.0
 OutputDir=..\..\dist
-OutputBaseFilename=Arcivo-{#AppVersion}-Setup-x64
+OutputBaseFilename=Arcivo-{#AppVersion}-Setup-{#AppArch}
 SetupIconFile={#Brand}\installer.ico
 UninstallDisplayIcon={app}\{#DashExe}
 UninstallDisplayName={#AppName}

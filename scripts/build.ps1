@@ -8,8 +8,8 @@
 
   Outputs (in .\dist):
     Arcivo\                         one-folder app (Arcivo.exe console + ArcivoDashboard.exe desktop app)
-    Arcivo-<ver>-Setup-x64.exe      per-user installer (needs Inno Setup 6+: winget install JRSoftware.InnoSetup)
-    Arcivo-<ver>-portable-x64.zip   portable build (data kept next to the exe in ArcivoData\)
+    Arcivo-<ver>-Setup-<arch>.exe      per-user installer (needs Inno Setup 6+: winget install JRSoftware.InnoSetup)
+    Arcivo-<ver>-portable-<arch>.zip   portable build (data kept next to the exe in ArcivoData\)
     SHA256SUMS.txt
 #>
 param(
@@ -22,6 +22,7 @@ param(
 $ErrorActionPreference = "Stop"
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 Set-Location $Root
+$env:PIP_CACHE_DIR = Join-Path $Root ".pip-cache"
 
 function Step($msg) { Write-Host "`n==> $msg" -ForegroundColor Cyan }
 
@@ -72,8 +73,22 @@ if (-not (Test-Path $Py)) { Invoke-Expression "$Python -m venv .venv-build" }
 if (-not (Test-Path $Py)) { throw "Could not create the virtual environment with '$Python'" }
 & $Py -c "import sys; print('Python', sys.version.split()[0]); sys.exit(0 if sys.version_info >= (3, 14) else 1)"
 if ($LASTEXITCODE -ne 0) { throw "Arcivo needs Python 3.14 or newer (got an older interpreter from '$Python')" }
+if (-not $Arch) {
+  $rawArch = (& $Py -c "import platform; print(platform.machine())").Trim().ToLower()
+  $Arch = if ($rawArch -match "arm64|aarch64") { "arm64" } else { "x64" }
+}
+Write-Host "Target architecture: $Arch"
 & $Py -m pip install --upgrade pip wheel | Out-Null
-& $Py -m pip install -r requirements.txt -r requirements-dev.txt
+$wheelsDir = Join-Path $Root "packaging\wheels"
+if (Test-Path $wheelsDir) {
+  $localWheels = Get-ChildItem -Path $wheelsDir -Filter "*.whl"
+  if ($localWheels) {
+    Write-Host "Installing local wheels from $wheelsDir"
+    & $Py -m pip install --no-deps ($localWheels | Select-Object -ExpandProperty FullName)
+  }
+}
+$findLinksArg = if (Test-Path $wheelsDir) { @("--find-links", $wheelsDir) } else { @() }
+& $Py -m pip install @findLinksArg -r requirements.txt -r requirements-dev.txt
 if ($LASTEXITCODE -ne 0) { throw "pip install failed" }
 & $Py -m pip install -e . --no-deps
 if ($LASTEXITCODE -ne 0) { throw "pip install -e . failed" }
@@ -121,7 +136,7 @@ New-Item -ItemType Directory -Force -Path $portableDir | Out-Null
 Copy-Item "dist\Arcivo\*" $portableDir -Recurse
 Set-Content (Join-Path $portableDir "portable.flag") "Arcivo portable mode: settings, index and session live in .\ArcivoData next to the executables."
 Copy-Item "packaging\windows\README-portable.txt" (Join-Path $portableDir "README.txt")
-$zip = "dist\Arcivo-$Version-portable-x64.zip"
+$zip = "dist\Arcivo-$Version-portable-$Arch.zip"
 if (Test-Path $zip) { Remove-Item $zip }
 Compress-Archive -Path "build\portable\Arcivo" -DestinationPath $zip -CompressionLevel Optimal
 
@@ -132,7 +147,7 @@ if (-not $SkipInstaller) {
     Write-Warning "Inno Setup (ISCC.exe) not found - skipping the installer. Install it (winget install JRSoftware.InnoSetup) or pass -Iscc 'C:\path\to\ISCC.exe'."
   } else {
     Write-Host "Using $isccPath"
-    & $isccPath "/DAppVersion=$Version" "/DSourceDir=$Root\dist\Arcivo" "packaging\windows\arcivo.iss"
+    & $isccPath "/DAppVersion=$Version" "/DAppArch=$Arch" "/DSourceDir=$Root\dist\Arcivo" "packaging\windows\arcivo.iss"
     if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed" }
   }
 }

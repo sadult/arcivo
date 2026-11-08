@@ -21,6 +21,7 @@ __pycache__/
 *.egg-info/
 .eggs/
 .venv*/
+.pip-cache/
 venv/
 .pytest_cache/
 .mypy_cache/
@@ -30,6 +31,7 @@ coverage.xml
 htmlcov/
 
 # --- build outputs ---
+packaging/wheels/
 build/
 dist/
 packaging/pyinstaller/version_info*.txt

@@ -14,7 +14,15 @@ permissions:
 
 jobs:
   windows:
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            arch: x64
+          - os: windows-11-arm
+            arch: arm64
+    runs-on: ${{ matrix.os }}
     env:
       QT_QPA_PLATFORM: offscreen
       ARCIVO_NO_ANIMATIONS: "1"
@@ -30,13 +38,19 @@ jobs:
           $tag = "${{ github.event.inputs.tag || github.ref_name }}".TrimStart("v")
           $ver = (Select-String -Path src\arcivo\__version__.py -Pattern '__version__ = "([^"]+)"').Matches[0].Groups[1].Value
           if ($tag -ne $ver) { throw "Tag v$tag does not match __version__ $ver" }
+      - name: Build cryptg speedup (ARM64)
+        if: matrix.arch == 'arm64'
+        shell: pwsh
+        run: |
+          pip install setuptools-rust
+          pip wheel --no-deps cryptg -w packaging/wheels
       - name: Install Inno Setup
         shell: pwsh
         run: |
           if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) { choco install innosetup -y --no-progress }
       - name: Build (tests, PyInstaller, installer, portable ZIP, checksums)
         shell: pwsh
-        run: ./scripts/build.ps1 -Python python -Build ${{ github.sha }}
+        run: ./scripts/build.ps1 -Python python -Arch ${{ matrix.arch }} -Build ${{ github.sha }}
       - name: Release notes from CHANGELOG
         shell: pwsh
         run: |
@@ -44,7 +58,7 @@ jobs:
           $text = Get-Content CHANGELOG.md -Raw
           $m = [regex]::Match($text, "(?s)## \[$([regex]::Escape($ver))\][^\n]*\n(.*?)(?=\n## \[|\z)")
           $body = if ($m.Success) { $m.Groups[1].Value.Trim() } else { "See CHANGELOG.md" }
-          $body += "`n`n---`n**Downloads:** ``Arcivo-$ver-Setup-x64.exe`` (recommended, per-user installer) or ``Arcivo-$ver-portable-x64.zip``. Verify with ``SHA256SUMS.txt``.`n`nAfter installing, start **Arcivo** (console home screen: sign in, check connection, proxy) and then **Arcivo Dashboard** (the desktop app).`n`nArcivo is an independent app that uses the Telegram API; it is not affiliated with Telegram. You need your own API ID/hash from https://my.telegram.org/apps."
+          $body += "`n`n---`n**Downloads:**`n* **x64:** ``Arcivo-$ver-Setup-x64.exe`` (installer) or ``Arcivo-$ver-portable-x64.zip```n* **ARM64:** ``Arcivo-$ver-Setup-arm64.exe`` (installer) or ``Arcivo-$ver-portable-arm64.zip```n`nVerify with ``SHA256SUMS.txt``.`n`nAfter installing, start **Arcivo** (console home screen: sign in, check connection, proxy) and then **Arcivo Dashboard** (the desktop app).`n`nArcivo is an independent app that uses the Telegram API; it is not affiliated with Telegram. You need your own API ID/hash from https://my.telegram.org/apps."
           Set-Content release-notes.md $body
       - uses: softprops/action-gh-release@v3
         with:
@@ -53,6 +67,6 @@ jobs:
           body_path: release-notes.md
           draft: true
           files: |
-            dist/Arcivo-*-Setup-x64.exe
-            dist/Arcivo-*-portable-x64.zip
+            dist/Arcivo-*-Setup-*.exe
+            dist/Arcivo-*-portable-*.zip
             dist/SHA256SUMS.txt
