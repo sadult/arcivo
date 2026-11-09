@@ -16,6 +16,8 @@ if not exist "packaging\pyinstaller\arcivo.spec" (
 
 rem ---- find Python 3.14 or newer ---------------------------------------------
 set "PYCMD="
+call :trypy "py -3.14-arm64"
+call :trypy "py -3-arm64"
 call :trypy "py -3.14"
 call :trypy "py -3"
 call :trypy "py"
@@ -56,8 +58,8 @@ echo  ==========================================
 echo    Done!  Output folder: dist\
 echo      dist\Arcivo\Arcivo.exe            console home screen
 echo      dist\Arcivo\ArcivoDashboard.exe   desktop app
-echo      dist\Arcivo-*-portable-x64.zip    portable
-if exist "dist\Arcivo-*-Setup-x64.exe" echo      dist\Arcivo-*-Setup-x64.exe       installer
+echo      dist\Arcivo-*-portable-*.zip    portable
+if exist "dist\Arcivo-*-Setup-*.exe" echo      dist\Arcivo-*-Setup-*.exe       installer
 echo  ==========================================
 start "" explorer "%~dp0dist"
 echo.

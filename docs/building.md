@@ -1,7 +1,7 @@
 # Building Arcivo for Windows
 
 ## Prerequisites
-- Windows 10/11 x64, **Python 3.14 or newer** (python.org or `winget install Python.Python.3.14`)
+- Windows 10/11 (x64 or ARM64), **Python 3.14 or newer** (python.org or `winget install Python.Python.3.14`)
 - [Inno Setup 6](https://jrsoftware.org/isinfo.php) for the installer (`winget install JRSoftware.InnoSetup`)
 - Git (for the build number)
 
@@ -18,12 +18,12 @@ This creates `.venv-build`, runs the tests, builds the one-folder app with PyIns
 | Output | Description |
 |---|---|
 | `dist/Arcivo/` | `Arcivo.exe` (console home screen + CLI) and `ArcivoDashboard.exe` (windowed desktop app) sharing one runtime |
-| `dist/Arcivo-<ver>-Setup-x64.exe` | per-user installer: no admin rights, Start-menu + optional desktop shortcut, optional PATH entry, uninstaller that asks before removing local data |
-| `dist/Arcivo-<ver>-portable-x64.zip` | unzip anywhere; data stays in `ArcivoData\` beside the exe |
+| `dist/Arcivo-<ver>-Setup-<arch>.exe` | per-user installer: no admin rights, Start-menu + optional desktop shortcut, optional PATH entry, uninstaller that asks before removing local data |
+| `dist/Arcivo-<ver>-portable-<arch>.zip` | unzip anywhere; data stays in `ArcivoData\` beside the exe |
 
 Or just double-click `build.bat`.
 
-Flags: `-SkipTests`, `-SkipInstaller`, `-Iscc "C:\path\to\ISCC.exe"`, `-Python "py -3.14"`, `-Build <id>`. Inno Setup is found via PATH, the registry and Program Files; if missing, the installer step is skipped with a warning.
+Flags: `-Arch <x64|arm64>`, `-SkipTests`, `-SkipInstaller`, `-Iscc "C:\path\to\ISCC.exe"`, `-Python "py -3.14"`, `-Build <id>`. Inno Setup is found via PATH, the registry and Program Files; if missing, the installer step is skipped with a warning.
 
 ## CI
 

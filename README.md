@@ -75,13 +75,13 @@ from demo data by `scripts/screenshots.py`).
 
 ## Install
 
-**Requirements:** Windows 10 or 11 (64-bit). About 250 MB disk space plus your index/cache.
+**Requirements:** Windows 10 or 11 (64-bit, x64 or ARM64). About 250 MB disk space plus your index/cache.
 The installer and portable builds include everything they need. Running or building from source needs **Python 3.14 or newer** (minimum: 3.14).
 
 | Option | How |
 |---|---|
-| **Installer** (recommended) | Download `Arcivo-<version>-Setup-x64.exe` from [Releases](https://github.com/sadult/arcivo/releases) and run it. Installs per-user (no admin) and adds two Start-menu shortcuts – **Arcivo** (console home screen) and **Arcivo Dashboard** (desktop app) – plus optional desktop icons and `arcivo` on PATH. |
-| **Portable** | Download `Arcivo-<version>-portable-x64.zip`, unzip anywhere (e.g. a USB drive), run `Arcivo.exe` (console) or `ArcivoDashboard.exe` (desktop app). Everything is stored in `ArcivoData\` next to it. |
+| **Installer** (recommended) | Download `Arcivo-<version>-Setup-x64.exe (or Setup-arm64.exe for ARM64)` from [Releases](https://github.com/sadult/arcivo/releases) and run it. Installs per-user (no admin) and adds two Start-menu shortcuts – **Arcivo** (console home screen) and **Arcivo Dashboard** (desktop app) – plus optional desktop icons and `arcivo` on PATH. |
+| **Portable** | Download `Arcivo-<version>-portable-x64.zip (or portable-arm64.zip)`, unzip anywhere (e.g. a USB drive), run `Arcivo.exe` (console) or `ArcivoDashboard.exe` (desktop app). Everything is stored in `ArcivoData\` next to it. |
 | **From source** | `pip install "arcivo @ git+https://github.com/sadult/arcivo"` (**Python 3.14+**), then `arcivo` (console menu) or `arcivo gui`. |
 
 Verify downloads with `SHA256SUMS.txt` from the release. Unsigned builds may show a SmartScreen prompt
